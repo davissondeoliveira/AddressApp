@@ -11,17 +11,16 @@ import org.json.JSONObject;
 
 import model.AddressModel;
 
-public class AddressService implements AddressServiceImp{
+public class AddressService{
+	private Connection con = null;
+	private String user = "admin";
+	private String pass = "Aloha1234!";
 	
 	public List <AddressModel> getList() {
 		
 		List <AddressModel> lObj = new ArrayList<AddressModel>();
 		
 		JSONObject obj = new JSONObject();
-		
-		Connection con = null;
-		String user = "admin";
-		String pass = "Aloha1234!";
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -60,6 +59,34 @@ public class AddressService implements AddressServiceImp{
 		}
 		
 		return lObj;
+	}
+	public Boolean checkZip(String zip) {
+		System.out.println("checking: "+zip);
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://test.cj3z3d92rgya.us-east-1.rds.amazonaws.com:3306/admin",user, pass);
+			Statement stmt= con.createStatement();
+	        ResultSet rs=stmt.executeQuery("SELECT * FROM admin.available_zips;");
+	        System.out.println("Connection is done");
+	        while (rs.next()) {
+	        	if(rs.getString("ZIP").contentEquals(zip)) {
+		        	System.out.println(rs.getString("ZIP"));
+	        		return true;
+	        	}
+	        }
+	        //close the connection
+	        System.out.println("Connection is being closed");
+	        stmt.close();
+	        con.close();
+	        
+		}catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+			return false;
+		}
+		
+		return false;
 	}
 
 }
