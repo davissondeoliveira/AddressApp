@@ -1,10 +1,11 @@
 package service;
 
+import java.util.List;
 
-import org.json.JSONObject;
+import model.AddressModel;
 
 public interface AddressServiceImp{
 	
-	public JSONObject getConnection();
+	public List <AddressModel> getList();
 
 }
