@@ -88,5 +88,65 @@ public class AddressService{
 		
 		return false;
 	}
+	
+
+	public Boolean add(String zip) {
+		System.out.println("checking: "+zip);
+		Boolean newZip = checkZip(zip);
+		int count=0;
+		if(!newZip) {
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				con=DriverManager.getConnection("jdbc:mysql://test.cj3z3d92rgya.us-east-1.rds.amazonaws.com:3306/admin",user, pass);
+				Statement stmt= con.createStatement();
+		        ResultSet rs=stmt.executeQuery("SELECT COUNT(*) FROM admin.available_zips;");
+		        while (rs.next()) {
+		        	 count = rs.getInt(1);
+		        	 break;
+		        }
+		        stmt.close();
+		        con.close();
+		        System.out.println("TOTAL: " + count);
+		        Class.forName("com.mysql.cj.jdbc.Driver");
+				con=DriverManager.getConnection("jdbc:mysql://test.cj3z3d92rgya.us-east-1.rds.amazonaws.com:3306/admin",user, pass);
+				stmt= con.createStatement();
+		        stmt.executeUpdate("INSERT INTO admin.available_zips (ID, ZIP) VALUES ("+count+", \""+zip+"\");");
+		        System.out.println("added");
+		        //close the connection
+		        System.out.println("Connection is being closed");
+		        stmt.close();
+		        con.close();
+		        
+			}catch (Exception e) {
+				// TODO: handle exception
+				System.out.println(e);
+				return false;
+			}
+		}
+		return false;
+	}
+	public Boolean remove(String zip) {
+		System.out.println("removing: "+zip);
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://test.cj3z3d92rgya.us-east-1.rds.amazonaws.com:3306/admin",user, pass);
+			Statement stmt= con.createStatement();
+	        stmt.executeUpdate("DELETE FROM admin.available_zips WHERE ZIP = "+zip+";");
+	        System.out.println("Removed");
+	     
+	        //close the connection
+	        System.out.println("Connection is being closed");
+	        stmt.close();
+	        con.close();
+	        
+		}catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+			return false;
+		}
+		
+		return false;
+	}
 
 }

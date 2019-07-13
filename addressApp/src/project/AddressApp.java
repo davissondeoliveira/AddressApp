@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +22,7 @@ public class AddressApp extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		PrintWriter printWriter = response.getWriter();
 		AddressService addressService = new AddressService();
 		
 		String s2 = request.getParameter("streetOne");
@@ -31,10 +33,11 @@ public class AddressApp extends HttpServlet {
 		String ct = request.getParameter("country");
 
 		if(addressService.checkZip(zp)) {
-			request.getSession().setAttribute("message", "Good!");
-			response.sendRedirect("result.jsp");
+			
+			PrintWriter out = response.getWriter();  
+			out.write("Good Job!");
 		}else {
-			response.sendRedirect("index.html");
+			response.sendRedirect("index.jsp");
 		}
 	}
 }
