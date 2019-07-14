@@ -2,7 +2,6 @@ package model;
 
 public class AddressModel {
 
-	public int id;
 	public String streetOne;
 	public String streetTwo;
 	public String city;
@@ -10,13 +9,6 @@ public class AddressModel {
 	public String zip;
 	public String country;
 	
-	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getStreetOne() {
 		return streetOne;
 	}
@@ -53,6 +45,5 @@ public class AddressModel {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	
 	
 }
