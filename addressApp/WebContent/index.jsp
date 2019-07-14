@@ -28,8 +28,8 @@
 </nav>
 <div class="collapse" id="collapseUser">
   <div class="card card-body">
-  	<h4>User</h4>
   	  <div class="container">
+  	  <h4>User</h4>
     <div class="row">
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
         <div class="card card-signin my-5">
@@ -101,12 +101,14 @@
   </div>
 </div>
 <div class="collapse" id="collapseExample">
-	<h4>Administrator</h4>
 	<div class="card card-body">
+  	  <div class="container">
+  	  <h4>Administrator</h4>
     	<p>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson
     	 ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt 
     	 sapiente ea proident.</p>
 	  </div>
+	 </div>
 </div>
 
 </body>
