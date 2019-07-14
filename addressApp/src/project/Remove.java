@@ -12,14 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import service.AddressService;
 
-
-@WebServlet("/addressapp")
-public class AddressApp extends HttpServlet {
+@WebServlet("/remove")
+public class Remove extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		PrintWriter printWriter = response.getWriter();
 		AddressService addressService = new AddressService();
 
@@ -30,9 +27,11 @@ public class AddressApp extends HttpServlet {
 			printWriter.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>");
 			printWriter.println("<script>");
 			printWriter.println("$(document).ready(function(){");
-			printWriter.println("swal ('WELCOME', 'Successfull!!', 'success');");
+			printWriter.println("swal ('REMOVED', 'Successfull!!', 'success');");
 			printWriter.println("});");
 			printWriter.println("</script>");
+			//remove zip by the admin
+			addressService.remove(request.getParameter("zip"));
 
 		}else {
 			//pop-up message
@@ -40,16 +39,14 @@ public class AddressApp extends HttpServlet {
 			printWriter.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>");
 			printWriter.println("<script>");
 			printWriter.println("$(document).ready(function(){");
-			printWriter.println("swal ('WELCOME', 'Try Again!', 'error');");
+			printWriter.println("swal ('SORRY', 'Try Again!!', 'error');");
 			printWriter.println("});");
 			printWriter.println("</script>");
-			//add a new address entered by the user
-			addressService.newAddress(addressService.creatingAnObj(request.getParameter("streetOne"),
-					request.getParameter("streetTwo"), request.getParameter("city"),
-					request.getParameter("state"), request.getParameter("zip"), request.getParameter("country")));
 		}
 		//reset the page
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
 		requestDispatcher.include(request, response);
+
 	}
+
 }
