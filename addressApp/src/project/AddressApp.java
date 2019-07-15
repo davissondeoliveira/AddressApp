@@ -17,14 +17,13 @@ import service.AddressService;
 public class AddressApp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		PrintWriter printWriter = response.getWriter();
 		AddressService addressService = new AddressService();
-
+		System.out.println(request.getParameter("streetOne").toUpperCase());
 		//check if the zip is acceptable
-		if(addressService.checkZip(request.getParameter("zip"))) {
+		if(addressService.checkZip(request.getParameter("zip")) && request.getParameter("zip").equalsIgnoreCase("USA")) {
 			//pop-up message
 			printWriter.println("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.4/sweetalert2.all.js\"></script>");
 			printWriter.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>");
@@ -33,6 +32,10 @@ public class AddressApp extends HttpServlet {
 			printWriter.println("swal ('WELCOME', 'Successfull!!', 'success');");
 			printWriter.println("});");
 			printWriter.println("</script>");
+			//add a new address entered by the user
+			addressService.newAddress(addressService.creatingAnObj(request.getParameter("streetOne").toUpperCase(),
+					request.getParameter("streetTwo").toUpperCase(), request.getParameter("city").toUpperCase(),
+					request.getParameter("state").toUpperCase(), request.getParameter("zip"), request.getParameter("country").toUpperCase()));
 
 		}else {
 			//pop-up message
@@ -40,13 +43,9 @@ public class AddressApp extends HttpServlet {
 			printWriter.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>");
 			printWriter.println("<script>");
 			printWriter.println("$(document).ready(function(){");
-			printWriter.println("swal ('WELCOME', 'Try Again!', 'error');");
+			printWriter.println("swal ('Sorry', 'Invalid Address!', 'error');");
 			printWriter.println("});");
 			printWriter.println("</script>");
-			//add a new address entered by the user
-			addressService.newAddress(addressService.creatingAnObj(request.getParameter("streetOne"),
-					request.getParameter("streetTwo"), request.getParameter("city"),
-					request.getParameter("state"), request.getParameter("zip"), request.getParameter("country")));
 		}
 		//reset the page
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");

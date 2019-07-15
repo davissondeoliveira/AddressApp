@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@page import="java.util.*"%>
+<%@page import="model.AddressModel"%>
+<%
+	ArrayList addressCollection = (ArrayList) request.getAttribute("addressCollection");
+	ArrayList zipCollection = (ArrayList) request.getAttribute("zipCollection");
+	String uncover = (String) request.getAttribute("uncover");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,17 +21,63 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- JSP -->
+<script>
+	$(function() {
+		$("#user").click(function() {
+			$("#collapseUser").toggle();
+			$("#collapseAdmin").hide();
+		});
+	});
+	$(function() {
+		$("#admin").click(function() {
+			$("#collapseUser").hide();
+			$("#collapseAdmin").toggle();
+		});
+	});
+	$(function() {
+		$("#home").click(function() {
+			$("#collapseUser").hide();
+			$("#collapseAdmin").hide();
+		});
+	});
+</script>
+<!-- Quick CSS -->
+<style>
+body, html {
+	height: 100%;
+	margin: 0;
+}
+
+.bg {
+	/* The image used */
+	background-image: url("AddressAppLogo.png");
+	/* Full height */
+	height: 100%;
+	/* Center and scale the image nicely */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+</style>
+
 </head>
-<body>
+<body class="bg">
 	<nav id="navbar-example2" class="navbar navbar-light bg-light">
-		<a class="navbar-brand" href="#">AddressApp</a>
+		<a id="home" class="navbar-brand" href="#home">AddressApp</a>
 		<ul class="nav nav-pills">
-			<li class="nav-item"><a class="navbar-brand"
-				data-toggle="collapse" href="#collapseUser" aria-expanded="false"
-				aria-controls="collapseUser"> User </a></li>
-			<li class="nav-item"><a class="navbar-brand"
-				data-toggle="collapse" href="#collapseAdmin" aria-expanded="false"
-				aria-controls="collapseAdmin"> Administrator </a></li>
+			<li class="nav-item"><a id="user" class="navbar-brand"
+				href="#collapseUser"> User </a></li>
+			<li class="nav-item">
+				<form action="${pageContext.request.contextPath}/addressList"
+					method="post">
+					<a id="admin" href="#collapseAdmin"> <input type="submit"
+						class="navbar-brand"
+						style="border: none; background-color: Transparent;"
+						value="Administrator">
+					</a>
+				</form>
+			</li>
 		</ul>
 	</nav>
 	<div class="collapse" id="collapseUser">
@@ -68,7 +122,8 @@
 									<div class="form-label-group">
 										<label for="validationDefault01">Country</label> Country: <input
 											type="text" class="form-control" placeholder="Country"
-											list="countrys" name="country" required autofocus>
+											list="countrys" name="country" maxlength="3" required
+											autofocus>
 										<datalist id="countrys">
 											<option value="DZA">Algeria</option>
 											<option value="ASM">American Samoa</option>
@@ -105,7 +160,7 @@
 
 		</div>
 	</div>
-	<div class="collapse show" id="collapseAdmin">
+	<div class="collapse <%=uncover%>" id="collapseAdmin">
 		<div class="card card-body">
 			<div class="container">
 				<h4>Administrator</h4>
@@ -167,10 +222,84 @@
 								</div>
 							</div>
 						</div>
+						<hr class="my-4">
+						<div class="row">
+							<div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+								<div class="table-responsive shadow p-3 mb-5 bg-white rounded">
+									<table class="table table-striped table-sm">
+										<h5 class="card-title text-center">User Addresses</h5>
+										<thead>
+											<tr>
+												<th>ID</th>
+												<th>STREET 1</th>
+												<th>STREET 2</th>
+												<th>CITY</th>
+												<th>STATE</th>
+												<th>ZIP-CODE</th>
+												<th>COUNTRY</th>
+											</tr>
+										</thead>
+										<tbody>
+											<%
+												if (addressCollection != null) {
+													for (int i = 0; i < addressCollection.size(); i++) {
+														AddressModel addressModel = (AddressModel) addressCollection.get(i);
+											%>
+											<tr>
+												<td><%=addressModel.getId()%></td>
+												<td><%=addressModel.getStreetOne()%></td>
+												<td><%=addressModel.getStreetTwo()%></td>
+												<td><%=addressModel.getCity()%></td>
+												<td><%=addressModel.getState()%></td>
+												<td><%=addressModel.getZip()%></td>
+												<td><%=addressModel.getCountry()%></td>
+											</tr>
+											<%
+												}
+												} else {
+
+												}
+											%>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-4 col-lg-3 mx-auto">
+							<div class="table-responsive shadow p-3 mb-5 bg-white rounded">
+								<table class="table table-striped table-sm">
+									<h5 class="card-title text-center">Available Zip Codes</h5>
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>ZIP-CODE</th>
+										</tr>
+									</thead>
+									<tbody>
+										<%
+											if (zipCollection != null) {
+												for (int i = 0; i < zipCollection.size(); i++) {
+													AddressModel addressModelZip = (AddressModel) zipCollection.get(i);
+										%>
+										<tr>
+											<td><%=addressModelZip.getId()%></td>
+											<td><%=addressModelZip.getZip()%></td>
+										</tr>
+										<%
+											}
+											} else {
+
+											}
+										%>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 </body>
 </html>
